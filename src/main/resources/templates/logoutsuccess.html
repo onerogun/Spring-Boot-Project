@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />
+</head>
+<body>
+<form >
+    <ul>
+        <li><a th:href="@{/}" class="active" target="_self">Home</a></li>
+        <li><a th:href="@{/admin}" target="_self">Admin</a></li>
+        <li><a th:href="@{/manager}" target="_self">Store Manager</a></li>
+        <li><a th:href="@{/orderlist}" target="_self">Customer</a></li>
+        <li><a th:href="@{/logout}" target="_self">Logout</a></li>
+    </ul>
+
+    <br>
+    <br>
+
+    <div>
+        <h2>Logout Successful</h2>
+    </div>
+
+    <table>
+        <tr>
+            <th>Spring Boot Project Info</th>
+        </tr>
+        <tr>
+            <td>Spring boot project admin username:admin, password:admin</td>
+        </tr>
+        <tr>
+            <td>Spring boot project manager username:manager, password:m</td>
+        </tr>
+        <tr>
+            <td>Spring boot project customer1 username:c1, password:z</td>
+        </tr>
+        <tr>
+            <td>Spring boot project customer2 username:c2, password:x</td>
+        </tr>
+        <tr>
+            <td>Project uses Spring Security, Spring MVC, Spring Data ,Hibernate, React, AWS Elastic Beanstalk, AWS S3</td>
+        </tr>
+        <tr>
+            <td>Connected to MySQL database on AWS</td>
+        </tr>
+        <tr>
+            <td>User passwords are encrypted before saving to the database</td>
+        </tr>
+        <tr>
+            <td>Admin is authorized to perform CRUD operations on Users and also authorized to access Manager section</td>
+        </tr>
+        <tr>
+            <td>When a customer is added by admin, customer is also automatically added to a seperate customer table for ordering purposes</td>
+        </tr>
+        <tr>
+            <td>Admin and Manager are authorized to perform CRUD operations on products, also add/edit product pictures</td>
+        </tr>
+        <tr>
+            <td>Add/Edit product picture functionality provided by ReactJS</td>
+        </tr>
+        <tr>
+            <td>Product pictures are stored on AWS S3 Bucket</td>
+        </tr>
+        <tr>
+            <td>Admin and Manager are authorized to show Products database content</td>
+        </tr>
+        <tr>
+            <td>Customer is authorized to access Place Order and enter number of items to order and also see their own order history</td>
+        </tr>
+        <tr>
+            <td>If customer submits empty order, error page shown and order is not placed</td>
+        </tr>
+        <tr>
+            <td>If order is successful, order date and time saved along with order data</td>
+        </tr>
+        <tr>
+            <td>Customer, customer info, order, orderitem and product saved into different tables and connected through foreign keys</td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />
+</head>
+<body>
+<ul>
+    <li><a th:href="@{/}" target="_self">Home</a></li>
+    <li><a th:href="@{/admin}" target="_self">Admin</a></li>
+    <li><a th:href="@{/manager}" target="_self">Store Manager</a></li>
+    <li><a th:href="@{/products}" target="_self">Products</a></li>
+    <li><a th:href="@{/orders}" target="_self">Your Orders</a></li>
+    <li><a th:href="@{/order}" target="_self">New Order</a></li>
+    <li><a th:href="@{/logout}" target="_self">Logout</a></li>
+</ul>
+<br>
+<br>
+<div>
+<h2>No item is selected</h2>
+</div>
+</body>
+</html>

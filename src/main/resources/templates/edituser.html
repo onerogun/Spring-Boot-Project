@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />
+</head>
+<body>
+<ul>
+    <li><a th:href="@{/}">Return Home</a></li>
+    <li><a th:href="@{/admin}" target="_self">Admin</a></li>
+    <li><a th:href="@{/admin/show}" target="_self">Show User Records</a></li>
+    <li><a th:href="@{/manager}" target="_self">Store Manager</a></li>
+    <li><a th:href="@{/customer}" target="_self">Customer</a></li>
+    <li><a th:href="@{/logout}" target="_self">Logout</a></li>
+</ul>
+
+<br>
+
+<form action="#" th:action="@{/edituser}" th:object="${users}" method="post">
+    <h2>Edit User</h2>
+    <table>
+        <tr>
+            <td>Id:</td>
+            <td><input type="text" readonly="readonly" th:field="*{id}" /></td>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" th:field="*{userName}" /></td>
+            <td th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">Username Error</td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="text" th:field="*{password}" /></td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
+        </tr>
+        <tr>
+            <td>Active:</td>
+            <td>
+                <select th:field="*{active}">
+                    <option th:value="'true'" th:text="TRUE"></option>
+                    <option th:value="'false'" th:text="FALSE"></option>
+                </select>
+            </td>
+            <!--     <td><input type="text" th:field="*{active}" placeholder="Enter true or false"/></td>    -->
+            <td th:if="${#fields.hasErrors('active')}" th:errors="*{active}">Active Error</td>
+        </tr>
+        <tr>
+            <td>Roles:</td>
+            <td>
+                <select th:field="*{roles}">
+                    <option th:value="'ROLE_ADMIN'" th:text="ADMIN"></option>
+                    <option th:value="'ROLE_MANAGER'" th:text="MANAGER"></option>
+                    <option th:value="'ROLE_CUSTOMER'" th:text="CUSTOMER"></option>
+                </select>
+            </td>
+            <!--    <td><input type="text" th:field="*{roles}" placeholder="Enter as ROLE_ADMIN, ROLE_MANAGER or ROLE_CUSTOMER" /></td>  -->
+            <td th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Roles Error</td>
+        </tr>
+    </table>
+    <div class="btn">
+    <button class="button button1" type="submit" name ="action" value="edit">Save</button>
+    </div>
+</form>
+</body>
+</html>

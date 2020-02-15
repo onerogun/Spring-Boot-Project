@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Add Product</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />
+</head>
+<body>
+<ul>
+    <li><a th:href="@{/}">Return Home</a></li>
+    <li><a th:href="@{/admin}" target="_self">Admin</a></li>
+    <li><a class="active" th:href="@{/manager}" target="_self">Store Manager</a></li>
+    <li><a th:href="@{/products}" target="_self">Products</a></li>
+    <li><a th:href="@{/customer}" target="_self">Customer</a></li>
+    <li><a th:href="@{/logout}" target="_self">Logout</a></li>
+</ul>
+
+<br>
+
+<form action="#" th:action="@{/manager}" th:object="${product}" method="post">
+    <h2>Add new Product</h2>
+    <table>
+        <tr>
+            <td>Product Name:</td>
+            <td><input type="text" th:field="*{productName}" /></td>
+            <td th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}">Product Name Error</td>
+        </tr>
+        <tr>
+            <td>Price:</td>
+            <td><input type="text" th:field="*{price}" /></td>
+            <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error</td>
+        </tr>
+
+    </table>
+    <div class="btn">
+    <button class="button button1" type="submit" name ="action" value="save">Save</button>
+    </div>
+</form>
+</body>
+</html>

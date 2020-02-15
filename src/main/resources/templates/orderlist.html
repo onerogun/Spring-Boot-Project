@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Your Orders</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />
+</head>
+<body>
+<form>
+    <ul>
+        <li><a th:href="@{/}" target="_self">Home</a></li>
+        <li><a th:href="@{/orders}" target="_self">Your Orders JSON Format</a></li>
+        <li><a th:href="@{/orderlist}" class="active" target="_self">Your Orders Table Format</a></li>
+        <li><a th:href="@{/order}" target="_self">New Order</a></li>
+        <li><a th:href="@{/logout}" target="_self">Logout</a></li>
+    </ul>
+    <br>
+    <br>
+    <table>
+        <thead>
+        <tr>
+            <th>Order Id</th>
+            <th>Order Time</th>
+            <th>Order Total</th>
+            <th>Order Details</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${ordersList}">
+                <td th:text="${order.orderId}">Order Id</td>
+                <td th:text="${order.timeOfOrder}">Order Time</td>
+                <td th:text="${order.orderTotal}">Order Total</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Image</th>
+                                <th>Product Id</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${order.orderItems}" >
+                                <td> <img  th:src="${'/getproducts/getimage/'+item.productId}"/> </td>
+                                <td th:text="${item.productId}">Product Id</td>
+                                <td th:text="${item.productName}">Product Name</td>
+                                <td th:text="${item.price}">Price</td>
+                                <td th:text="${item.quantity}">Quantity</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>
