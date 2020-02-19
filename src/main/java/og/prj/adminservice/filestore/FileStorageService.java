@@ -29,6 +29,10 @@ public class FileStorageService {
 
     public void saveToBucket(Long id, MultipartFile image) {
 
+        productRepository.findById(id)
+                .orElseThrow( () -> new IllegalStateException(String.format("Product with id: %s doesn't exist!", id)));
+
+
         if (image.isEmpty()) {
             throw new IllegalStateException("EMPTY IMAGE!");
         }
@@ -54,6 +58,9 @@ public class FileStorageService {
     }
 
     public byte[] downloadFromBucket(Long productId) {
+
+        productRepository.findById(productId).orElseThrow( () -> new IllegalStateException(String.format("Product with id: %s doesn't exist!", productId)));
+
         String productImageName = productRepository.findById(productId).get().getProductImageName();
 
         String path = getPath(productId);

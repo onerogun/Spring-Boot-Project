@@ -1,6 +1,5 @@
 package og.prj.adminservice.upload;
 
-import og.prj.adminservice.photo.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +13,6 @@ import java.io.IOException;
 @Controller
 public class FileController {
 
-    @Autowired
-    PhotoService photoService;
 
     @Autowired
     FileService fileService;
@@ -28,7 +25,7 @@ public class FileController {
     @PostMapping("/uploadFile")
     public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
 
-        photoService.addPhoto(file);
+
 
 
         fileService.uploadFile(file);

@@ -8,10 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/getproducts")
@@ -28,6 +31,10 @@ public class FileStorageController {
     public FileStorageController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
     }
+
+
+
+
 
     @GetMapping
     public List<Product> getProductFromDB() {
