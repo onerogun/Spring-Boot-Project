@@ -84,7 +84,7 @@ class MultiHttpSecurityConfig {
                   /*  .addFilter(new JwtUserNamePasswordAuthFilter(authenticationManager()))
                     .addFilterAfter(new JwtTokenVerifier(), JwtUserNamePasswordAuthFilter.class)*/
                     .authorizeRequests()
-                    .antMatchers("/", "/css/**", "/css/*", "/css", "css/**","/send-pin","/check-pin" , "/getproducts/getimage/*","/gettoken/**","/gettoken/*").permitAll()
+                    .antMatchers("/", "/css/**", "/css/*", "/css", "css/**","/send-pin","/check-pin" , "/getproducts/getimage/*","/gettoken/**","/gettoken/*","/getjson","/getimageforjson/**").permitAll()
                     .antMatchers("/getproducts/saveimage/*").hasAnyRole("ADMIN", "MANAGER")
                     .anyRequest().authenticated();
              http.csrf().disable();
@@ -122,8 +122,7 @@ class MultiHttpSecurityConfig {
                                 .addFilterAfter(new JwtTokenVerifier(), JwtUserNamePasswordAuthFilter.class)
                         */
                    .authorizeRequests()
-                    .antMatchers("/", "/error","/home", "/css/**", "/css/*", "/css", "css/**","/signin", "/logoutsuccessful","/gettoken/**","/gettoken/*")
-                    .permitAll()
+                    .antMatchers("/", "/error","/home", "/css/**", "/css/*", "/css", "css/**","/signin", "/logoutsuccessful","/gettoken/**","/gettoken/*","/getjson","/getimageforjson/**").permitAll()
                     .antMatchers("/admin", "/admin/*", "/adduser/**", "/edituser/**", "/edituser").hasRole("ADMIN")
                     .antMatchers("/manager", "/products", "/addproduct/**", "/editproduct/**", "/editproduct", "/editproductsreact").hasAnyRole("ADMIN", "MANAGER")
                     .antMatchers("/order", "/orders", "/orderlist").hasRole("CUSTOMER")
