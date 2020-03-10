@@ -48,6 +48,7 @@ public class AdminResources implements WebMvcConfigurer {
         registry.addViewController("/logoutsuccessful").setViewName("logoutsuccess");
         registry.addViewController("/editsuccessful").setViewName("editsuccess");
         registry.addViewController("/uploadStatus").setViewName("uploadStatus");
+        registry.addViewController("/signupsuccess").setViewName("signupsuccess");
     }
 
     @Override

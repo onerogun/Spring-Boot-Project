@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="ISO-8859-1">
     <title>Order</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />
@@ -8,8 +9,8 @@
 <body>
 <ul>
     <li><a th:href="@{/}" target="_self">Home</a></li>
-    <li><a th:href="@{/orders}" target="_self">Your Orders JSON Format</a></li>
-    <li><a th:href="@{/orderlist}" target="_self">Your Orders Table Format</a></li>
+    <li><a th:href="@{/orders}" target="_self">Your Orders React Rendered</a></li>
+    <li><a th:href="@{/orderlist}" target="_self">Your Orders Thymeleaf Rendered</a></li>
     <li><a th:href="@{/order}" class="active" target="_self">New Order</a></li>
     <li><a th:href="@{/logout}" target="_self">Logout</a></li>
 </ul>

@@ -3,35 +3,25 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="ISO-8859-1">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Home</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />
 </head>
 <body>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-    <a class="navbar-brand" href="#">Logo</a>
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a th:href="@{/}" class="active" target="_self">Home</a>
-        </li>
-        <li class="nav-item">
-            <a th:href="@{/admin}" target="_self">Admin</a>
-        </li>
-        <li class="nav-item">
-            <a th:href="@{/manager}" target="_self">Store Manager</a>
-        </li>
-        <li class="nav-item">
-            <a th:href="@{/orderlist}" target="_self">Customer</a>
-        </li>
-        <li class="nav-item">
-            <a th:href="@{/logout}" target="_self">Logout</a>
-        </li>
-    </ul>
-</nav>
 <form >
+    <ul>
+        <li><a th:href="@{/}" class="active" target="_self">Home</a></li>
+        <li><a th:href="@{/admin}" target="_self">Admin</a></li>
+        <li><a th:href="@{/manager}" target="_self">Store Manager</a></li>
+        <li><a th:href="@{/orderlist}" target="_self">Customer</a></li>
+        <li><a th:href="@{/logout}" target="_self">Logout</a></li>
+    </ul>
 
     <br>
     <br>
+
+    <div>
+        <h2>Sign Up Successful</h2>
+    </div>
 
     <table>
         <tr>

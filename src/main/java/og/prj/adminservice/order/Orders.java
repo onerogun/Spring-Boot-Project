@@ -2,7 +2,6 @@ package og.prj.adminservice.order;
 
 import og.prj.adminservice.orderitem.OrderItem;
 import og.prj.adminservice.product.AmountWrapper;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;

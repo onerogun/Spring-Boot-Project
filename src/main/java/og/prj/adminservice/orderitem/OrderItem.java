@@ -4,8 +4,6 @@ import og.prj.adminservice.order.Orders;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "OrderItem")

@@ -1,6 +1,5 @@
 package og.prj.adminservice;
 
-import og.prj.adminservice.jpafiles.CustomUserDetails;
 import og.prj.adminservice.jpafiles.UserRepository;
 import og.prj.adminservice.product.Product;
 import og.prj.adminservice.product.ProductRepository;
@@ -10,14 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.security.Principal;
-import java.util.Arrays;
 
 @Controller
 @CrossOrigin("*")

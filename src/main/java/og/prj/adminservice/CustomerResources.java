@@ -1,7 +1,8 @@
 package og.prj.adminservice;
 
-import og.prj.adminservice.customer.CustomerRepository;
+import og.prj.adminservice.customer.*;
 import og.prj.adminservice.jpafiles.UserRepository;
+import og.prj.adminservice.jpafiles.Users;
 import og.prj.adminservice.order.OrderRepository;
 import og.prj.adminservice.order.Orders;
 import og.prj.adminservice.orderitem.OrderItem;
@@ -10,12 +11,18 @@ import og.prj.adminservice.orderitem.ProductConverter;
 import og.prj.adminservice.product.AmountWrapper;
 import og.prj.adminservice.product.Product;
 import og.prj.adminservice.product.ProductRepository;
+import og.prj.adminservice.util.PasswordConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.Principal;
@@ -39,28 +46,45 @@ public class CustomerResources {
     public static Principal prncipal;
 
     @Autowired
+    private PasswordConfig passwordConfig;
+
+
+    @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private CustomerContactRepository customerContactRepository;
 
     @Autowired
     private OrderRepository orderRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private ProductRepository productRepository;
+
 
     @Autowired
     private OrderItemRepository orderItemRepository;
 
 
+    @GetMapping(path = "/orders")
+    public void sendRedirect(HttpServletRequest request, HttpServletResponse response, Principal principal) throws IOException {
+
+        Long userId = userRepository.findByUserName(principal.getName()).get().getId();
+
+        response.sendRedirect("http://edit-pics.s3-website-us-east-1.amazonaws.com/getcustomertoken/" + userId);
+    }
 
 
-    @GetMapping("/orders")
+
+    @GetMapping("/getorders/{id}")
     @ResponseBody
-    public List<Orders> showOrders(Principal principal) {
+    public List<Orders> showOrders(@PathVariable Long id) {
         orderItemRepository.deleteByQuantity(0);
-        return customerRepository.getOne(userRepository.findByUserName(principal.getName()).get().getId()).getOrdersList();
+       // return customerRepository.getOne(Long.valueOf(336)).getOrdersList();
+        return customerRepository.getOne(id).getOrdersList();
     }
 
     @GetMapping("/orderlist")
@@ -140,5 +164,45 @@ public class CustomerResources {
         order.deleteAmountWrapper();
         orderItemRepository.deleteByQuantity(0);
         return "redirect:/orderplaced";
+    }
+
+
+
+    @GetMapping("/signup")
+    public String showFormSignUpCustomer(Model model) {
+        model.addAttribute("customer", new CustomerSignUp());
+        return "signup";
+    }
+
+    @RequestMapping(value = "/signup" , method = RequestMethod.POST)
+    public String signUpNewUser(@Valid CustomerSignUp customer, BindingResult bindingResult) {
+        if(!bindingResult.hasErrors()) {
+            if(userRepository.findByUserName(customer.getUserName()).isPresent()) {
+                return "redirect:/error";
+            }
+
+
+            Users newCustomer = new Users();
+            newCustomer.setPassword(passwordConfig.passwordEncoder().encode(customer.getPassword()));
+            newCustomer.setUserName(customer.getUserName());
+            newCustomer.setActive(true);
+            newCustomer.setRoles("ROLE_CUSTOMER");
+
+            Users savedUser = userRepository.save(newCustomer);
+
+            Customer c = new Customer();
+            c.setEmail(newCustomer.getUserName() + "@ads.com");
+            c.setId(savedUser.getId());
+            CustomerContact c1 = new CustomerContact();
+            c1.setAddress(savedUser.getUserName() + " 3243 w223");
+            c1.setPhoneNumber("94568 848646");
+            c1.setId(savedUser.getId());
+            customerRepository.save(c);
+            customerContactRepository.save(c1);
+
+            return "redirect:/signupsuccess";
+        } else {
+            return "redirect:/error";
+        }
     }
 }

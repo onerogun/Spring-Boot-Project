@@ -3,7 +3,6 @@ package og.prj.adminservice.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.lang.Strings;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,7 +38,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         }
 
         String token =  authHeader.replace("Bearer ", "");
-
+        System.out.println("token submitted: " + token);
         try {
             String key = "somesecurekey";
             Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
