@@ -96,7 +96,7 @@ public class StoreManagerResources {
 
         Long userId = userRepository.findByUserName(principal.getName()).get().getId();
 
-        response.sendRedirect("http://edit-pics.s3-website-us-east-1.amazonaws.com/gettoken/" + userId);
+        response.sendRedirect(CustomerResources.REACTJS_URI + "gettoken/" + userId);
     }
 
 

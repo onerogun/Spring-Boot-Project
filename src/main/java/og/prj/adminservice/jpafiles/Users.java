@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "StoreUsers")
 @DynamicUpdate
-public class Users {
+public class Users{
 
 
     @Id

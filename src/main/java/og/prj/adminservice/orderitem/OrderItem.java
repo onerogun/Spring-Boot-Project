@@ -56,6 +56,15 @@ public class OrderItem {
         this.custFK =custFK;
     }
 
+    public OrderItem(Long productId,String productName, double price,String orderTime,Long custFK, int quantity) {
+        this.productId = productId;
+        this.productName = productName;
+        this.price = price;
+        this.orderTime =orderTime;
+        this.custFK =custFK;
+        this.quantity = quantity;
+    }
+
     public OrderItem(Long id, Long productId,String productName, double price,String orderTime) {
         this.id = id;
         this.productId = productId;
@@ -108,5 +117,17 @@ public class OrderItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "productId=" + productId +
+                ", productName='" + productName + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", orderTime='" + orderTime + '\'' +
+                ", custFK=" + custFK +
+                '}';
     }
 }

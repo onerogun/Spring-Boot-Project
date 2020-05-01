@@ -6,128 +6,94 @@ import og.prj.adminservice.jpafiles.Users;
 import og.prj.adminservice.order.OrderRepository;
 import og.prj.adminservice.order.Orders;
 import og.prj.adminservice.orderitem.OrderItem;
-import og.prj.adminservice.orderitem.OrderItemRepository;
 import og.prj.adminservice.orderitem.ProductConverter;
-import og.prj.adminservice.product.AmountWrapper;
-import og.prj.adminservice.product.Product;
-import og.prj.adminservice.product.ProductRepository;
-import og.prj.adminservice.util.PasswordConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Controller
 public class CustomerResources {
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = BigDecimal.valueOf(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
-
     public static Principal prncipal;
 
-    @Autowired
-    private PasswordConfig passwordConfig;
-
+    public static final String REACTJS_URI = "http://edit-pics.s3-website-us-east-1.amazonaws.com/";
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
-    private CustomerContactRepository customerContactRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private CustomerServices customerServices;
 
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-
-    @Autowired
-    private OrderItemRepository orderItemRepository;
-
-
     @GetMapping(path = "/orders")
-    public void sendRedirect(HttpServletRequest request, HttpServletResponse response, Principal principal) throws IOException {
+    public void sendRedirect(HttpServletResponse response, Principal principal) throws IOException {
 
         Long userId = userRepository.findByUserName(principal.getName()).get().getId();
 
-        response.sendRedirect("http://edit-pics.s3-website-us-east-1.amazonaws.com/getcustomertoken/" + userId);
+       // response.sendRedirect("http://edit-pics.s3-website-us-east-1.amazonaws.com/getcustomertoken/" + userId);
+        response.sendRedirect(REACTJS_URI + "getcustomertoken/" + userId);
     }
 
+    @GetMapping(path = "/neworderreact")
+    public void sendReactNewOrder(HttpServletResponse response, Principal principal) throws IOException {
+
+        Long userId = userRepository.findByUserName(principal.getName()).get().getId();
+
+        response.sendRedirect(REACTJS_URI + "getcustomerordertoken/" + userId);
+    }
 
 
     @GetMapping("/getorders/{id}")
     @ResponseBody
     public List<Orders> showOrders(@PathVariable Long id) {
-        orderItemRepository.deleteByQuantity(0);
-       // return customerRepository.getOne(Long.valueOf(336)).getOrdersList();
+//        orderItemRepository.deleteByQuantity(0);
         return customerRepository.getOne(id).getOrdersList();
+    }
+
+    @GetMapping("/getcustomerinfo/{id}")
+    @ResponseBody
+    public ResponseEntity<CustomerVO> getCustomerInfo(@PathVariable Long id) {
+        return   ResponseEntity.ok(customerServices.getCustomerInformation(id));
     }
 
     @GetMapping("/orderlist")
     public String showUsers(Model model, Principal principal) {
-        orderItemRepository.deleteByQuantity(0);
+//        orderItemRepository.deleteByQuantity(0);
         List<Orders> ordersList =  customerRepository.getOne(userRepository.findByUserName(principal.getName()).get().getId()).getOrdersList();
         model.addAttribute("ordersList",ordersList);
 
         return "orderlist";
     }
 
-/*
-    @RequestMapping(value = "/username", method = RequestMethod.GET)
-    @ResponseBody
-    public String currentUserName(Principal principal) {
-        return principal.getName() + " id: " +userRepository.findByUserName(principal.getName()).get().getId();
-    }
-*/
     @GetMapping("/order")
-    public String showAvailableProducts(Model model, Principal principal) {
+    public String showAvailableProducts(Model model,Principal principal) {
         prncipal = principal;
-        Orders order = new Orders();
-        order.setAmountWrapper(new AmountWrapper());
-        AmountWrapper amountWrapper = order.getAmountWrapper();
-        Iterable<Product> productList = productRepository.findAll();
-        productList.forEach(product -> amountWrapper.addProduct(product));
-        order.setAmountWrapper(amountWrapper);
-        model.addAttribute("order", order);
+        model.addAttribute("order", customerServices.getAvailableProductsFromDB());
         return "order";
     }
 
     @PostMapping("/order")
     public String placeOrder(@ModelAttribute Orders order,Principal principal) {
         prncipal = principal;
-        if (ProductConverter.time == null) {
-            ProductConverter.time = LocalDateTime.now();
-        }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formatDateTime = ProductConverter.time.format(formatter);
-
-        order.setTimeOfOrder(formatDateTime);
-        order.setCustomerFK(userRepository.findByUserName(principal.getName()).get().getId());
 
         AtomicBoolean isOrderEmpty = new AtomicBoolean(true);
         order.getAmountWrapper().getWrapper().forEach(product ->
@@ -136,17 +102,43 @@ public class CustomerResources {
                         isOrderEmpty.set(false);
                     }
                 }
-                );
+        );
         if(isOrderEmpty.get()) {
             return "redirect:/emptyorder";
         }
-        orderRepository.save(order);
+
+        LocalDateTime time = ProductConverter.time;
+        if(time == null) {
+            ProductConverter.time = LocalDateTime.now();
+            time = ProductConverter.time;
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = time.format(formatter);
+
+        order.setTimeOfOrder(formattedDateTime);
+
+        Long customerFK = userRepository.findByUserName(principal.getName()).get().getId();
+        order.setCustomerFK(customerFK);
+
+        List<OrderItem> orderItems = order.getOrderItems();
+
+        //   orderRepository.save(order);
         AtomicReference<Double> orderTotal = new AtomicReference<>((double) 0);
+
+        List<OrderItem> finalOrderItems = orderItems;
 
         order.getAmountWrapper().getWrapper().forEach(product ->
                 {
-                        Long productId = product.getProductId();
-                        double productPrice = productRepository.findById(productId).get().getPrice();
+                    if(product.getAmount() != 0) {
+                        finalOrderItems.forEach(orderItem -> {
+                            if (orderItem.getProductId() == product.getProductId()) {
+                                orderItem.setQuantity(product.getAmount());
+                            }
+                        });
+
+
+           /*             double productPrice = productRepository.findById(productId).get().getPrice();
                         String orderTime = ProductConverter.time.toString();
                         OrderItem orderItem =orderItemRepository.findByProductIdAndCustFKAndOrderTime(productId,userRepository.findByUserName(principal.getName()).get().getId(),orderTime);
                         if(orderItem != null) {
@@ -155,17 +147,22 @@ public class CustomerResources {
                                 orderItem.setQuantity(product.getAmount());
                                 orderItemRepository.save(orderItem);
                             }
-                        }
+                        }   */
+                    }
                 }
         );
-        order.setOrderTotal(round(orderTotal.get().doubleValue(),3));
-        orderRepository.save(order);
+
+        orderItems = orderItems.stream().filter(orderItem -> orderItem.getQuantity() != 0).collect(Collectors.toList());
+        orderItems.forEach(orderItem -> orderTotal.updateAndGet(v -> (double) (v + orderItem.getQuantity() * orderItem.getPrice())));
+
+        order.setOrderItems(orderItems);
+        order.setOrderTotal(CustomerServices.round(orderTotal.get().doubleValue(),3));
 
         order.deleteAmountWrapper();
-        orderItemRepository.deleteByQuantity(0);
+        orderRepository.save(order);
+
         return "redirect:/orderplaced";
     }
-
 
 
     @GetMapping("/signup")
@@ -178,27 +175,14 @@ public class CustomerResources {
     public String signUpNewUser(@Valid CustomerSignUp customer, BindingResult bindingResult) {
         if(!bindingResult.hasErrors()) {
             if(userRepository.findByUserName(customer.getUserName()).isPresent()) {
-                return "redirect:/error";
+
             }
 
+           Users savedCustomer = customerServices.saveNewCustomer(customer);
 
-            Users newCustomer = new Users();
-            newCustomer.setPassword(passwordConfig.passwordEncoder().encode(customer.getPassword()));
-            newCustomer.setUserName(customer.getUserName());
-            newCustomer.setActive(true);
-            newCustomer.setRoles("ROLE_CUSTOMER");
-
-            Users savedUser = userRepository.save(newCustomer);
-
-            Customer c = new Customer();
-            c.setEmail(newCustomer.getUserName() + "@ads.com");
-            c.setId(savedUser.getId());
-            CustomerContact c1 = new CustomerContact();
-            c1.setAddress(savedUser.getUserName() + " 3243 w223");
-            c1.setPhoneNumber("94568 848646");
-            c1.setId(savedUser.getId());
-            customerRepository.save(c);
-            customerContactRepository.save(c1);
+            if(savedCustomer == null) {
+                return "redirect:/error";
+            }
 
             return "redirect:/signupsuccess";
         } else {

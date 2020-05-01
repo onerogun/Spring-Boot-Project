@@ -4,10 +4,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="ISO-8859-1">
     <title>Home</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />
+  <!--  <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css.css" />    -->
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+    />
 </head>
 <body>
-<form >
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" th:href="@{/neworderreact}">
+        Products
+    </a>
+    <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+    >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a
+                        class="nav-link"
+                        th:href="@{/}"
+                >
+                    Home <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link"
+                        th:href="@{/admin}"
+                >
+                    Admin
+                </a>
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link"
+                        th:href="@{/manager}"
+                >
+                    Add New Product(Store Manager)
+                </a>
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link"
+                        th:href="@{/products}"
+                >
+                    Edit Products(Store Manager)
+                </a>
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link"
+                        th:href="@{/orders}"
+                >
+                    Customer
+                </a>
+            </li>
+            <li class="nav-item">
+                <a
+                        class="nav-link"
+                        th:href="@{/logout}"
+                >
+                    Logout
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a
+                        class="nav-link dropdown-toggle"
+                        href="#"
+                        id="navbarDropdownMenuLink"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                >
+                    More Options
+                </a>
+                <div
+                        class="dropdown-menu"
+                        aria-labelledby="navbarDropdownMenuLink"
+                >
+                    <a class="dropdown-item" th:href="@{/orderlist}">
+                        Your Orders at Thymeleaf Rendered Page
+                    </a>
+                    <a class="dropdown-item" th:href="@{/order}">
+                        Place New Order at Thymeleaf Rendered Page
+                    </a>
+                    <a class="dropdown-item" th:href="@{/neworderreact}">
+                        Place New Order at React Rendered Page
+                    </a>
+                    <a class="dropdown-item" th:href="@{/editproductsreact}">
+                        Edit Product Pictures on React Rendered Page(Manager and Admin only)
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<!--
     <ul>
         <li><a th:href="@{/}" class="active" target="_self">Home</a></li>
         <li><a th:href="@{/admin}" target="_self">Admin</a></li>
@@ -18,73 +125,81 @@
 
     <br>
     <br>
-
+-->
     <div>
         <h2>Logout Successful</h2>
     </div>
 
-    <table>
-        <tr>
-            <th>Spring Boot Project Info</th>
-        </tr>
-        <tr>
-            <td>Spring boot project admin username:admin, password:admin</td>
-        </tr>
-        <tr>
-            <td>Spring boot project manager username:manager, password:m</td>
-        </tr>
-        <tr>
-            <td>Spring boot project customer1 username:c1, password:z</td>
-        </tr>
-        <tr>
-            <td>Spring boot project customer2 username:c2, password:x</td>
-        </tr>
-        <tr>
-            <td>Project uses Spring Security, Spring MVC, Spring Data ,Hibernate, React, AWS Elastic Beanstalk, AWS S3</td>
-        </tr>
-        <tr>
-            <td>Security is provided by both Form-Based Authentication and JWT</td>
-        </tr>
-        <tr>
-            <td>JWT token is created at successful login</td>
-        </tr>
-        <tr>
-            <td>Connected to MySQL database on AWS</td>
-        </tr>
-        <tr>
-            <td>User passwords are encrypted before saving to the database</td>
-        </tr>
-        <tr>
-            <td>Admin is authorized to perform CRUD operations on Users and also authorized to access Manager section</td>
-        </tr>
-        <tr>
-            <td>When a customer is added by admin, customer is also automatically added to a seperate customer table for ordering purposes</td>
-        </tr>
-        <tr>
-            <td>Admin and Manager are authorized to perform CRUD operations on products, also add/edit product pictures</td>
-        </tr>
-        <tr>
-            <td>Add/Edit product picture functionality provided by ReactJS and Security is provided by JWT when editing product pictures</td>
-        </tr>
-        <tr>
-            <td>Product pictures are stored on AWS S3 Bucket and GET/POST requests secured by JWT</td>
-        </tr>
-        <tr>
-            <td>Admin and Manager are authorized to show Products database content</td>
-        </tr>
-        <tr>
-            <td>Customer is authorized to access Place Order and enter number of items to order and also see their own order history</td>
-        </tr>
-        <tr>
-            <td>If customer submits empty order, error page shown and order is not placed</td>
-        </tr>
-        <tr>
-            <td>If order is successful, order date and time saved along with order data</td>
-        </tr>
-        <tr>
-            <td>Customer, customer info, order, orderitem and product saved into different tables and connected through foreign keys</td>
-        </tr>
-    </table>
-</form>
+<table class="table table-striped table-hover table-dark">
+    <tr>
+        <th>Spring Boot Project Info</th>
+    </tr>
+    <tr>
+        <td>Spring boot project admin username:admin, password:admin</td>
+    </tr>
+    <tr>
+        <td>Spring boot project manager username:manager, password:m</td>
+    </tr>
+    <tr>
+        <td>Spring boot project customer1 username:c1, password:z</td>
+    </tr>
+    <tr>
+        <td>Spring boot project customer2 username:c2, password:x</td>
+    </tr>
+    <tr>
+        <td>Project uses Spring Security, Spring MVC, Spring Data ,Hibernate, React, AWS Elastic Beanstalk, AWS S3, ReactJS</td>
+    </tr>
+    <tr>
+        <td>Security is provided by both Form-Based Authentication and JWT</td>
+    </tr>
+    <tr>
+        <td>JWT token is created at successful login</td>
+    </tr>
+    <tr>
+        <td>Connected to MySQL database on AWS</td>
+    </tr>
+    <tr>
+        <td>User passwords are encrypted before saving to the database</td>
+    </tr>
+    <tr>
+        <td>Admin is authorized to perform CRUD operations on Users and also authorized to access Manager section</td>
+    </tr>
+    <tr>
+        <td>When a customer is added by admin, customer is also automatically added to a seperate customer table for ordering purposes</td>
+    </tr>
+    <tr>
+        <td>Admin and Manager are authorized to perform CRUD operations on products, also add/edit product pictures</td>
+    </tr>
+    <tr>
+        <td>Add/Edit product picture functionality provided by ReactJS and Security is provided by JWT when editing product pictures</td>
+    </tr>
+    <tr>
+        <td>Product pictures are stored on AWS S3 Bucket and GET/POST requests secured by JWT</td>
+    </tr>
+    <tr>
+        <td>Admin and Manager are authorized to show Products database content</td>
+    </tr>
+    <tr>
+        <td>Customer is authorized to access Place Order and enter number of items to order and also see their own order history</td>
+    </tr>
+    <tr>
+        <td>Customers can see past orders either on a Thymeleaf or ReactJS rendered page</td>
+    </tr>
+    <tr>
+        <td>Customers can see place order either on a Thymeleaf or ReactJS rendered page</td>
+    </tr>
+    <tr>
+        <td>If order is successful, order date and time saved along with order data</td>
+    </tr>
+    <tr>
+        <td>Customer, customer info, order, orderitem and product saved into different tables and connected through foreign keys</td>
+    </tr>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
 </body>
 </html>

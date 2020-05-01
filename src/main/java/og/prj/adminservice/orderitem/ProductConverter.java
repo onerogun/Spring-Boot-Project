@@ -9,6 +9,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 @Component
 public class ProductConverter implements Converter<String, OrderItem> {
@@ -32,8 +34,11 @@ public class ProductConverter implements Converter<String, OrderItem> {
         if(time == null || LocalDateTime.now().minusSeconds(5).isAfter(time)) {
             time = LocalDateTime.now();
         }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = time.format(formatter);
+
        Product p = productRepository.findById(id).get();
-       OrderItem o = new OrderItem(p.getProductId(),p.getProductName(),p.getPrice(),time.toString(), getUserId() );
+       OrderItem o = new OrderItem(p.getProductId(),p.getProductName(),p.getPrice(), formattedDateTime, getUserId() );
        return o;
     }
 }

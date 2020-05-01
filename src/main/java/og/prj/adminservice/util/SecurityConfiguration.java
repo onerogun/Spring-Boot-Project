@@ -81,7 +81,8 @@ class MultiHttpSecurityConfig {
                   /*  .addFilter(new JwtUserNamePasswordAuthFilter(authenticationManager()))
                     .addFilterAfter(new JwtTokenVerifier(), JwtUserNamePasswordAuthFilter.class)*/
                     .authorizeRequests()
-                    .antMatchers("/", "/css/**", "/css/*", "/css", "css/**","/send-pin","/check-pin" , "/getproducts/getimage/*","/gettoken/**","/gettoken/*","/getjson","/getimageforjson/**","/signup","/signupsuccess").permitAll()
+                    .antMatchers("/", "/css/**", "/css/*", "/css", "css/**","/send-pin","/check-pin" , "/getproducts/getimage/*","/gettoken/**",
+                            "/gettoken/*","/getjson","/getimageforjson/**","/signup","/signupsuccess").permitAll()
                     .antMatchers("/getproducts/saveimage/*").hasAnyRole("ADMIN", "MANAGER")
                     .antMatchers("/getorders/*","/getorders/**","/getorders").hasRole( "CUSTOMER")
                     .anyRequest().authenticated();
@@ -93,6 +94,43 @@ class MultiHttpSecurityConfig {
 
     @Configuration
     @Order(2)
+    public class JWTSecurityConfigurationCustomerInfo extends WebSecurityConfigurerAdapter {
+
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+            auth.userDetailsService(userDetailsService);
+        }
+
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .antMatcher("/getcustomerinfo/*").authorizeRequests().and()
+                    .cors().and()
+                    // .csrf().and()
+
+
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .addFilterBefore(tokenVerifier, UsernamePasswordAuthenticationFilter.class)
+                    /*  .addFilter(new JwtUserNamePasswordAuthFilter(authenticationManager()))
+                      .addFilterAfter(new JwtTokenVerifier(), JwtUserNamePasswordAuthFilter.class)*/
+                    .authorizeRequests()
+                    .antMatchers("/", "/css/**", "/css/*", "/css", "css/**","/send-pin","/check-pin" , "/getproducts/getimage/*","/gettoken/**",
+                            "/gettoken/*","/getjson","/getimageforjson/**","/signup","/signupsuccess").permitAll()
+                    .antMatchers("/getorders/*","/getorders/**","/getorders", "/getcustomerinfo/*").hasRole( "CUSTOMER")
+                    .anyRequest().authenticated();
+            http.csrf().disable();
+
+
+        }
+    }
+
+
+    @Configuration
+    @Order(3)
     public class JWTSecurityConfigurationCustomer extends WebSecurityConfigurerAdapter {
 
 
@@ -118,7 +156,7 @@ class MultiHttpSecurityConfig {
                       .addFilterAfter(new JwtTokenVerifier(), JwtUserNamePasswordAuthFilter.class)*/
                     .authorizeRequests()
                     .antMatchers("/", "/css/**", "/css/*", "/css", "css/**","/send-pin","/check-pin" ,"/gettoken/**","/gettoken/*","/getjson","/getimageforjson/**","/signup","/signupsuccess").permitAll()
-                    .antMatchers("/getorders/*","/getorders/**","/getorders").hasRole( "CUSTOMER")
+                    .antMatchers("/getorders/*").hasRole( "CUSTOMER")
                     .anyRequest().authenticated();
             http.csrf().disable();
 
@@ -128,7 +166,43 @@ class MultiHttpSecurityConfig {
 
 
     @Configuration
-    @Order(3)
+    @Order(4)
+    public class JWTSecurityConfigurationPlaceOrder extends WebSecurityConfigurerAdapter {
+
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+            auth.userDetailsService(userDetailsService);
+        }
+
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .antMatcher("/placeorderreact/*")//.authorizeRequests().and()
+                    .cors().and()
+                    // .csrf().and()
+
+
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .addFilterBefore(tokenVerifier, UsernamePasswordAuthenticationFilter.class)
+                    /*  .addFilter(new JwtUserNamePasswordAuthFilter(authenticationManager()))
+                      .addFilterAfter(new JwtTokenVerifier(), JwtUserNamePasswordAuthFilter.class)*/
+                    .authorizeRequests()
+                    .antMatchers("/", "/css/**", "/css/*", "/css", "css/**","/send-pin","/check-pin" ,"/gettoken/**","/gettoken/*","/getjson","/getimageforjson/**","/signup","/signupsuccess").permitAll()
+                    .antMatchers("/getorders/*","/getorders/**","/getorders", "/placeorderreact/*").hasRole( "CUSTOMER")
+                    .anyRequest().authenticated();
+            http.csrf().disable();
+
+
+        }
+    }
+
+
+    @Configuration
+    @Order(5)
     public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
@@ -154,9 +228,10 @@ class MultiHttpSecurityConfig {
                                 .addFilterAfter(new JwtTokenVerifier(), JwtUserNamePasswordAuthFilter.class)
                         */
                    .authorizeRequests()
-                    .antMatchers("/", "/error","/home", "/css/**", "/css/*", "/css", "css/**","/signin", "/logoutsuccessful","/gettoken/**","/gettoken/*","/getjson","/getimageforjson/**","/signup","/signupsuccess").permitAll()
+                    .antMatchers("/", "/error","/home", "/css/**", "/css/*", "/css", "css/**","/signin", "/logoutsuccessful"
+                            ,"/gettoken/**","/gettoken/*","/getjson","/getimageforjson/**","/signup","/signupsuccess").permitAll()
                     .antMatchers("/admin", "/admin/*", "/adduser/**", "/edituser/**", "/edituser").hasRole("ADMIN")
-                    .antMatchers("/manager", "/products", "/addproduct/**", "/editproduct/**", "/editproduct", "/editproductsreact").hasAnyRole("ADMIN", "MANAGER")
+                    .antMatchers("/manager", "/products", "/addproduct/**", "/editproduct/*", "/editproductsreact").hasAnyRole("ADMIN", "MANAGER")
                     .antMatchers("/order", "/orderlist", "/orders").hasRole("CUSTOMER")
                     .anyRequest().authenticated()
                    // .and().csrf().disable()
