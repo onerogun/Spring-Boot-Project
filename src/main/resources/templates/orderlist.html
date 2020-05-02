@@ -159,7 +159,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="item : ${order.orderItems}" >
-                                <td> <img class="img-fluid rounded-circle" style="width: 100px; height: 100px;" alt="Product Image" th:src="${'/getproducts/getimage/'+item.productId}"/> </td>
+                                <td> <img class="img-fluid rounded-circle" style="width: 100px; height: 100px;" alt="Product Image" th:src="${'/getproducts/getimage/'+item.productId}"/></td>
                                 <th scope="row" th:text="${item.productId}">Product Id</th>
                                 <td th:text="${item.productName}">Product Name</td>
                                 <td th:text="${item.price}">Price</td>

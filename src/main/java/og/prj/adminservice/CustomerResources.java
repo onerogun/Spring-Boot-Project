@@ -31,6 +31,7 @@ public class CustomerResources {
     public static Principal prncipal;
 
     public static final String REACTJS_URI = "http://edit-pics.s3-website-us-east-1.amazonaws.com/";
+  //  public static final String REACTJS_URI = "http://localhost:3000/";
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -49,7 +50,6 @@ public class CustomerResources {
 
         Long userId = userRepository.findByUserName(principal.getName()).get().getId();
 
-       // response.sendRedirect("http://edit-pics.s3-website-us-east-1.amazonaws.com/getcustomertoken/" + userId);
         response.sendRedirect(REACTJS_URI + "getcustomertoken/" + userId);
     }
 
@@ -65,8 +65,11 @@ public class CustomerResources {
     @GetMapping("/getorders/{id}")
     @ResponseBody
     public List<Orders> showOrders(@PathVariable Long id) {
-//        orderItemRepository.deleteByQuantity(0);
-        return customerRepository.getOne(id).getOrdersList();
+        List<Orders> orders = customerRepository.getOne(id).getOrdersList();
+        if(!orders.isEmpty()) {
+            Collections.sort(orders, Comparator.comparingLong(Orders::getOrderId).reversed());
+        }
+        return orders;
     }
 
     @GetMapping("/getcustomerinfo/{id}")
@@ -77,7 +80,6 @@ public class CustomerResources {
 
     @GetMapping("/orderlist")
     public String showUsers(Model model, Principal principal) {
-//        orderItemRepository.deleteByQuantity(0);
         List<Orders> ordersList =  customerRepository.getOne(userRepository.findByUserName(principal.getName()).get().getId()).getOrdersList();
         model.addAttribute("ordersList",ordersList);
 
