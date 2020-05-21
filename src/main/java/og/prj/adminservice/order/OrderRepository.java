@@ -6,5 +6,6 @@ import javax.transaction.Transactional;
 
 @Transactional
 public interface OrderRepository extends JpaRepository<Orders, Long> {
-    public long deleteByOrderIdAndCustomerFK(Long orderId, Long customerFK);
+    //return value, of type long, indicates how many records the method deleted.
+    long deleteByOrderIdAndCustomerFK(Long orderId, Long customerFK);
 }

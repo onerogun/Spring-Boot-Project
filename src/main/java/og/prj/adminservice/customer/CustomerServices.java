@@ -2,10 +2,7 @@ package og.prj.adminservice.customer;
 
 import og.prj.adminservice.jpafiles.UserRepository;
 import og.prj.adminservice.jpafiles.Users;
-import og.prj.adminservice.order.OrderRepository;
 import og.prj.adminservice.order.Orders;
-import og.prj.adminservice.orderitem.OrderItem;
-import og.prj.adminservice.orderitem.ProductConverter;
 import og.prj.adminservice.product.AmountWrapper;
 import og.prj.adminservice.product.Product;
 import og.prj.adminservice.product.ProductRepository;
@@ -15,13 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.security.Principal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerServices {
@@ -100,5 +90,18 @@ public class CustomerServices {
         customerContactRepository.save(c1);
 
         return savedUser;
+    }
+
+    public void setCustomerInfo(CustomerVO customerInfo, Long id) {
+
+        CustomerContact customerContact = customerContactRepository.getOne(id);
+        customerContact.setPhoneNumber(customerInfo.getPhoneNumber());
+        customerContact.setAddress(customerInfo.getAddress());
+
+        Customer customer = customerContact.getCustomer();
+        customer.setEmail(customerInfo.getEmail());
+        customerContact.setCustomer(customer);
+
+        customerContactRepository.save(customerContact);
     }
 }

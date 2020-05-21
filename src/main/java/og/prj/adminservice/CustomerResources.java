@@ -30,8 +30,8 @@ public class CustomerResources {
 
     public static Principal prncipal;
 
-    public static final String REACTJS_URI = "http://edit-pics.s3-website-us-east-1.amazonaws.com/";
-  //  public static final String REACTJS_URI = "http://localhost:3000/";
+   // public static final String REACTJS_URI = "http://edit-pics.s3-website-us-east-1.amazonaws.com/";
+    public static final String REACTJS_URI = "http://localhost:3000/";
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -71,13 +71,13 @@ public class CustomerResources {
         }
         return orders;
     }
-
+/*
     @GetMapping("/getcustomerinfo/{id}")
     @ResponseBody
     public ResponseEntity<CustomerVO> getCustomerInfo(@PathVariable Long id) {
         return   ResponseEntity.ok(customerServices.getCustomerInformation(id));
     }
-
+*/
     @GetMapping("/orderlist")
     public String showUsers(Model model, Principal principal) {
         List<Orders> ordersList =  customerRepository.getOne(userRepository.findByUserName(principal.getName()).get().getId()).getOrdersList();

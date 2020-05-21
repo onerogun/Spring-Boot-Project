@@ -49,6 +49,6 @@ public class OrderService {
     }
 
     public boolean cancelOrder(Long userId, Long orderId) {
-        return orderRepository.deleteByOrderIdAndCustomerFK(orderId, userId) == 0 ? false : true;
+        return orderRepository.deleteByOrderIdAndCustomerFK(orderId, userId) != 0;
     }
 }

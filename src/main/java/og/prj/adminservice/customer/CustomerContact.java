@@ -1,9 +1,12 @@
 package og.prj.adminservice.customer;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "CustomerContact")
+@DynamicUpdate
 public class CustomerContact {
 
     @Id
